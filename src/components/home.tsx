@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import SimulationGrid from "./SimulationGrid";
+import LLMLVisualizer from "./LLMLVisualizer";
+import LLMLSequenceDisplay from "./LLMLSequenceDisplay";
+import LLMLRecursiveDisplay from "./LLMLRecursiveDisplay";
+import FluidIntelligenceDisplay from "./FluidIntelligenceDisplay";
 import ControlPanel from "./ControlPanel";
 import StatisticsPanel from "./StatisticsPanel";
 import MetricsCharts from "./MetricsCharts";
@@ -9,6 +13,11 @@ const Home = () => {
   const [gridSize, setGridSize] = useState(50);
   const [simulationSpeed, setSimulationSpeed] = useState(50);
   const [agentCount, setAgentCount] = useState(10);
+  const [animationControls, setAnimationControls] = useState({
+    speed: 1,
+    density: 4,
+    intensity: 0.1,
+  });
 
   return (
     <div className="min-h-screen w-full bg-background p-6 flex flex-col gap-6">
@@ -17,6 +26,13 @@ const Home = () => {
       </h1>
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 h-full">
+        {/* FLUID Intelligence Display */}
+        <div className="xl:col-span-4 h-[400px]">
+          <FluidIntelligenceDisplay
+            animationControls={animationControls}
+            refreshInterval={5000}
+          />
+        </div>
         {/* Main simulation grid - spans 3 columns on xl screens */}
         <div className="xl:col-span-3 h-[800px]">
           <SimulationGrid
@@ -36,6 +52,8 @@ const Home = () => {
         {/* Control panel - 1 column */}
         <div className="xl:col-span-1">
           <ControlPanel
+            animationControls={animationControls}
+            onAnimationControlsChange={setAnimationControls}
             isRunning={isRunning}
             onSimulationToggle={setIsRunning}
             onSpeedChange={setSimulationSpeed}
@@ -49,9 +67,17 @@ const Home = () => {
           <StatisticsPanel />
         </div>
 
+        {/* LLML Recursive Display */}
+        <div className="xl:col-span-2 h-[300px]">
+          <LLMLRecursiveDisplay
+            refreshInterval={7000}
+            animationControls={animationControls}
+          />
+        </div>
+
         {/* Metrics charts - spans 2 columns on xl screens */}
         <div className="xl:col-span-2 h-[400px]">
-          <MetricsCharts />
+          <MetricsCharts animationControls={animationControls} />
         </div>
       </div>
     </div>
